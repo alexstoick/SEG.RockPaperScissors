@@ -16,6 +16,7 @@ public class Client {
 	private PrintWriter out ;
 	private BufferedReader in ;
 	private Socket socket;
+	private int client_number ;
 	private static final int SERVER_PORT = 4444 ;
 
 	public Client (String serverIPAddress) {
@@ -26,8 +27,12 @@ public class Client {
 		return in.readLine ();
 	}
 
+	public String getStatus() {
+		return GameManagement.getCurrentState () ;
+	}
+
 	public void sendChoice(String choice) {
-		out.write ( choice );
+		out.println ( "client" + client_number + ":" + choice );
 	}
 
 	public boolean connect() throws Exception {
@@ -37,6 +42,7 @@ public class Client {
 			this.socket = new Socket ( serverIPAddress , SERVER_PORT ) ;
 			this.out = new PrintWriter(socket.getOutputStream(), true);
 			this.in  = new BufferedReader( new InputStreamReader (socket.getInputStream()));
+			this.client_number = Integer.parseInt (in.readLine ());
 			System.out.println("connected");
 			return true;
 		} catch (UnknownHostException e) {

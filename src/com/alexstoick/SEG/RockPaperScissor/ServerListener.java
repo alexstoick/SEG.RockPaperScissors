@@ -12,6 +12,7 @@ import java.net.Socket;
 public class ServerListener extends Thread {
 
 	private Socket socket ;
+	private static int client_count = 0 ;
 
 	public ServerListener( Socket clientSocket) {
 		super("ServerThread");
@@ -24,7 +25,8 @@ public class ServerListener extends Thread {
 			BufferedReader in = new BufferedReader(
 					new InputStreamReader (
 							socket.getInputStream()));
-			out.println ( "New client: " + socket.getLocalAddress () ) ;
+			out.println ( ++client_count ) ;
+			GameManagement.playerJoined() ;
 			String inputLine ;
 
 			while ((inputLine = in.readLine()) != null) {

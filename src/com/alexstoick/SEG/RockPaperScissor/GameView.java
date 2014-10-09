@@ -25,22 +25,44 @@ public class GameView {
 		return statusTextArea;
 	}
 
+	private void disableButtons ()
+	{
+		rockButton.setEnabled ( false );
+		paperButton.setEnabled ( false );
+		scissorsButton.setEnabled ( false );
+	}
+
 	private final Client client ;
 
 	public GameView ( final Client client) {
 		this.client =  client ;
-		try {
-			System.out.println ( "321" ) ;
-			statusTextArea.append ("Connected:" + client.getLastLine() + "\n");
-			System.out.println ( "3213" ) ;
-		} catch ( IOException exception ) {
-			statusTextArea.append ( "Lost connection" ) ;
-		}
+
+		statusTextArea.append ("Connected:" + client.getStatus() + "\n");
 
 		paperButton.addActionListener ( new ActionListener () {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				client.sendChoice("paper");
+				statusTextArea.append ( "Selected Paper! \n");
+				disableButtons();
+			}
+		});
+
+		scissorsButton.addActionListener ( new ActionListener () {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				client.sendChoice ( "scissors" );
+				statusTextArea.append ( "Selected Scissors! \n");
+				disableButtons();
+			}
+		});
+
+		rockButton.addActionListener ( new ActionListener () {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				client.sendChoice ( "rock" );
+				statusTextArea.append ( "Selected Rock! \n");
+				disableButtons();
 			}
 		});
 	}
