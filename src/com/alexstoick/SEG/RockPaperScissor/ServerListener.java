@@ -25,17 +25,13 @@ public class ServerListener extends Thread {
 			BufferedReader in = new BufferedReader(
 					new InputStreamReader (
 							socket.getInputStream()));
-			out.println ( ++client_count ) ;
-			GameManagement.playerJoined() ;
-			String inputLine ;
-
-			while ((inputLine = in.readLine()) != null) {
-				System.out.println ( inputLine ) ;
-				out.println(inputLine);
-				if (inputLine.equals("Bye"))
-					break;
+			if ( client_count + 1 > 2 ){
+				socket.close();
+				return ;
 			}
-			socket.close();
+			out.println ( ++client_count ) ;
+			System.out.println(client_count);
+			out.println ( GameManagement.playerJoined() );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

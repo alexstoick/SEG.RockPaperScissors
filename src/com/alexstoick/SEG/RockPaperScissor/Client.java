@@ -27,12 +27,18 @@ public class Client {
 		return in.readLine ();
 	}
 
-	public String getStatus() {
-		return GameManagement.getCurrentState () ;
+	public String getGameStatus(){
+		out.println ( "status" ) ;
+		try {
+			return in.readLine ();
+		} catch (IOException e) {
+			e.printStackTrace ();
+		}
+		return "Error" ;
 	}
 
 	public void sendChoice(String choice) {
-		out.println ( "client" + client_number + ":" + choice );
+		out.println ("client" + client_number + ":" + choice);
 	}
 
 	public boolean connect() throws Exception {

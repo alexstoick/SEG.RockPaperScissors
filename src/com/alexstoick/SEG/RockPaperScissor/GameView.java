@@ -37,7 +37,15 @@ public class GameView {
 	public GameView ( final Client client) {
 		this.client =  client ;
 
-		statusTextArea.append ("Connected:" + client.getStatus() + "\n");
+		try {
+			statusTextArea.append ("Connected\n" + client.getLastLine () + "\n");
+		} catch (IOException e) {
+			e.printStackTrace ();
+		}
+
+		while ( GameManagement.cannotMakeChoice() ){
+			GameManagement.update_status ( client.getGameStatus () ) ;
+		}
 
 		paperButton.addActionListener ( new ActionListener () {
 			@Override
