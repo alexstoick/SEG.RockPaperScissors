@@ -44,13 +44,15 @@ public class ServerListener extends Thread {
 				if ( inputLine.contains ( "choice") ) {
 					String choice = inputLine.split ( ":" )[1];
 					GameManagement.playerMadeChoice ( myClientID , choice );
-				}
-				if ( inputLine.equals ("getWinner") ) {
+				} else if ( inputLine.equals ("getWinner") ) {
 					out.println ( GameManagement.getWinnerID () ) ;
-				}
-				if ( inputLine.equals ( "getOtherPlayerChoice") ) {
+				} else if ( inputLine.equals ( "getOtherPlayerChoice") ) {
 				    out.println ( GameManagement.getOtherPlayerChoice( myClientID ) ) ;
+				} else {
+					out.println ( "Wrong!" ) ;
+
 				}
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
