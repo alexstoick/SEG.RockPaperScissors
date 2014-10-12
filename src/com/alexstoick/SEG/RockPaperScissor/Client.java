@@ -42,7 +42,43 @@ public class Client {
 		try {
 			String status = in.readLine();
 			System.out.println ( status ) ;
-			return GameManagement.cannotMakeChoice ( status ) ;
+			return GameManagement.canMakeChoice ( status ) ;
+		}
+		catch ( IOException e ) {
+			e.printStackTrace ();
+		}
+		return false ;
+	}
+
+	public String[] getGameResults() {
+		String[] results = new String[2];
+
+		out.println ( "getWinner" ) ;
+		try {
+			String winnerID = in.readLine();
+			results[0] = (Integer.parseInt(winnerID) == client_number) ? "won" : "lost" ;
+		}
+		catch ( IOException e ) {
+			e.printStackTrace ();
+		}
+
+		out.println ( "getOtherPlayerChoice" ) ;
+		try {
+			results[1] = in.readLine() ;
+		}
+		catch ( IOException e ) {
+			e.printStackTrace ();
+		}
+
+		return results ;
+	}
+
+	public boolean isFinished(){
+		out.println( "status" );
+		try {
+			String status = in.readLine();
+			System.out.println ( status ) ;
+			return GameManagement.isFinished ( status ) ;
 		}
 		catch ( IOException e ) {
 			e.printStackTrace ();

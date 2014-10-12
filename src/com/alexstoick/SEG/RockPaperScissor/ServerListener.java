@@ -13,7 +13,7 @@ public class ServerListener extends Thread {
 
 	private Socket socket ;
 	private static int client_count = 0 ;
-	private int myClient ;
+	private int myClientID ;
 
 	public ServerListener( Socket clientSocket) {
 		super("ServerThread");
@@ -30,15 +30,27 @@ public class ServerListener extends Thread {
 				socket.close();
 				return ;
 			}
-			myClient = ++client_count ;
-			out.println ( myClient ) ;
+			myClientID = ++client_count ;
+			out.println ( myClientID ) ;
 			System.out.println(client_count);
 			out.println ( GameManagement.playerJoined() );
 			String inputLine ;
 			while ( (inputLine = in.readLine ()) != null ){
-				System.out.println ( "client " + myClient + " sent " + inputLine );
-				if ( inputLine.equals("status") )
-					out.println( GameManagement.getCurrentState () ) ;
+				System.out.println ( "client " + myClientID + " sent " + inputLine);
+				if ( inputLine.equals("status") ) {
+					System.out.println ( "response: " + GameManagement.getCurrentState () ) ;
+					out.println (GameManagement.getCurrentState ());
+				}
+				if ( inputLine.contains ( "choice") ) {
+					String choice = inputLine.split ( ":" )[1];
+					GameManagement.playerMadeChoice ( myClientID , choice );
+				}
+				if ( inputLine.equals ("getWinner") ) {
+					out.println ( GameManagement.getWinnerID () ) ;
+				}
+				if ( inputLine.equals ( "getOtherPlayerChoice") ) {
+				    out.println ( GameManagement.getOtherPlayerChoice( myClientID ) ) ;
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

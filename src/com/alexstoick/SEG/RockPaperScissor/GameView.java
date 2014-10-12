@@ -45,15 +45,36 @@ public class GameView {
 			e.printStackTrace ();
 		}
 		System.out.println ( client.getGameStatus () );
+
+		waitUntilChoiceIsAvailable();
+
+
+	}
+
+	private void waitUntilChoiceIsAvailable() {
 		( new Thread() {
 			public void run () {
 				while ( ! client.canMakeChoice()) ;
 				System.out.println ( client.getGameStatus () );
 				setButtonsEnabled ( true );
+				statusTextArea.append ( client.getGameStatus () ) ;
 				Thread.currentThread ().interrupt ();
 			}
 		}).start();
+	}
 
+	private void waitUntilFinished() {
+		( new Thread() {
+			public void run () {
+				while ( ! client.isFinished()) ;
+				System.out.println ( client.getGameStatus () );
+				setButtonsEnabled ( true );
+				statusTextArea.append ( client.getGameStatus () ) ;
+				String[] results = client.getGameResults();
+				statusTextArea.append ( "You "+ results[0] + ". The other player chose: " + results[1] ) ;
+				Thread.currentThread ().interrupt ();
+			}
+		}).start();
 	}
 
 	private void addButtonListeners() {
@@ -63,6 +84,7 @@ public class GameView {
 				client.sendChoice("paper");
 				statusTextArea.append ( "Selected Paper! \n");
 				setButtonsEnabled ( false );
+				waitUntilFinished();
 			}
 		});
 
@@ -72,6 +94,7 @@ public class GameView {
 				client.sendChoice ( "scissors" );
 				statusTextArea.append ( "Selected Scissors! \n");
 				setButtonsEnabled ( false );
+				waitUntilFinished();
 			}
 		});
 
@@ -81,6 +104,7 @@ public class GameView {
 				client.sendChoice ( "rock" );
 				statusTextArea.append ( "Selected Rock! \n");
 				setButtonsEnabled ( false );
+				waitUntilFinished();
 			}
 		});
 	}
