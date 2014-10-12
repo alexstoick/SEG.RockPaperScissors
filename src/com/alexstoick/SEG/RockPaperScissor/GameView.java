@@ -25,34 +25,44 @@ public class GameView {
 		return statusTextArea;
 	}
 
-	private void disableButtons ()
+	private void setButtonsEnabled (boolean state)
 	{
-		rockButton.setEnabled ( false );
-		paperButton.setEnabled ( false );
-		scissorsButton.setEnabled ( false );
+		rockButton.setEnabled ( state );
+		paperButton.setEnabled ( state );
+		scissorsButton.setEnabled ( state );
 	}
 
 	private final Client client ;
 
 	public GameView ( final Client client) {
-		this.client =  client ;
+		this.client = client;
 
+		addButtonListeners ();
+		setButtonsEnabled ( false );
 		try {
 			statusTextArea.append ("Connected\n" + client.getLastLine () + "\n");
 		} catch (IOException e) {
 			e.printStackTrace ();
 		}
+		System.out.println ( client.getGameStatus () );
+		( new Thread() {
+			public void run () {
+				while ( ! client.canMakeChoice()) ;
+				System.out.println ( client.getGameStatus () );
+				setButtonsEnabled ( true );
+				Thread.currentThread ().interrupt ();
+			}
+		}).start();
 
-		while ( GameManagement.cannotMakeChoice() ){
-			GameManagement.update_status ( client.getGameStatus () ) ;
-		}
+	}
 
+	private void addButtonListeners() {
 		paperButton.addActionListener ( new ActionListener () {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				client.sendChoice("paper");
 				statusTextArea.append ( "Selected Paper! \n");
-				disableButtons();
+				setButtonsEnabled ( false );
 			}
 		});
 
@@ -61,7 +71,7 @@ public class GameView {
 			public void actionPerformed (ActionEvent e) {
 				client.sendChoice ( "scissors" );
 				statusTextArea.append ( "Selected Scissors! \n");
-				disableButtons();
+				setButtonsEnabled ( false );
 			}
 		});
 
@@ -70,7 +80,7 @@ public class GameView {
 			public void actionPerformed (ActionEvent e) {
 				client.sendChoice ( "rock" );
 				statusTextArea.append ( "Selected Rock! \n");
-				disableButtons();
+				setButtonsEnabled ( false );
 			}
 		});
 	}

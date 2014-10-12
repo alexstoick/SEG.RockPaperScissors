@@ -37,8 +37,21 @@ public class Client {
 		return "Error" ;
 	}
 
+	public boolean canMakeChoice(){
+		out.println( "status" );
+		try {
+			String status = in.readLine();
+			System.out.println ( status ) ;
+			return GameManagement.cannotMakeChoice ( status ) ;
+		}
+		catch ( IOException e ) {
+			e.printStackTrace ();
+		}
+		return false ;
+	}
+
 	public void sendChoice(String choice) {
-		out.println ("client" + client_number + ":" + choice);
+		out.println ("choice" + ":" + choice);
 	}
 
 	public boolean connect() throws Exception {

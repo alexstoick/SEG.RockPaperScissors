@@ -12,6 +12,8 @@ public class GameManagement {
 	private static final String FINISHED = "Finished" ;
 	private static final String ERROR = "Error!!" ;
 
+	private static String[] choices ;
+
 	private static final String[] GAME_STATES = { WAITING_FOR_FIRST_PLAYER, WAITING_FOR_SECOND_PLAYER,
 			WAITING_FOR_FIRST_PLAYER_CHOICE, WAITING_FOR_SECOND_PLAYER_CHOICE, FINISHED } ;
 	private static int current_state = 0 ;
@@ -21,15 +23,24 @@ public class GameManagement {
 	}
 
 	private static int test = 0 ;
-	public static boolean cannotMakeChoice() {
-		++ test ;
-		if ( test == 1 )
+
+	public static void playerMadeChoice( int playerID , String choice ){
+		choices[playerID] = choice ;
+		++current_state ;
+		System.out.println ( "Game status after choice: " + getCurrentState () );
+	}
+
+	public static boolean cannotMakeChoice( String state) {
+		if ( state != WAITING_FOR_FIRST_PLAYER_CHOICE )
 			return false ;
 		return true ;
 	}
 
 	public static void update_status( String newStatus ) {
-
+		if ( getCurrentState() != newStatus )
+		{
+			++current_state;
+		}
 	}
 
 

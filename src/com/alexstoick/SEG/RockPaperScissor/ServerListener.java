@@ -13,6 +13,7 @@ public class ServerListener extends Thread {
 
 	private Socket socket ;
 	private static int client_count = 0 ;
+	private int myClient ;
 
 	public ServerListener( Socket clientSocket) {
 		super("ServerThread");
@@ -29,9 +30,16 @@ public class ServerListener extends Thread {
 				socket.close();
 				return ;
 			}
-			out.println ( ++client_count ) ;
+			myClient = ++client_count ;
+			out.println ( myClient ) ;
 			System.out.println(client_count);
 			out.println ( GameManagement.playerJoined() );
+			String inputLine ;
+			while ( (inputLine = in.readLine ()) != null ){
+				System.out.println ( "client " + myClient + " sent " + inputLine );
+				if ( inputLine.equals("status") )
+					out.println( GameManagement.getCurrentState () ) ;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
